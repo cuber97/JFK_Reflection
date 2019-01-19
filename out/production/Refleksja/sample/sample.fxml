@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <MenuBar prefHeight="32.0" prefWidth="1200.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="openMenuItem" mnemonicParsing="false" onAction="#openMenuItemClicked" text="Open" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadMenuItemClicked" text="Load" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Label layoutX="88.0" layoutY="119.0" text="Wybierz metodę" />
+      <ComboBox fx:id="methodComboBox" layoutX="88.0" layoutY="149.0" onAction="#methodComboBoxSelected" prefHeight="31.0" prefWidth="289.0" />
+      <Label layoutX="88.0" layoutY="45.0" text="Ścieżka:" />
+      <Label fx:id="pathLabel" layoutX="170.0" layoutY="45.0" prefHeight="21.0" prefWidth="459.0" text="Label" />
+      <Label layoutX="611.0" layoutY="96.0" text="Metadata">
+         <font>
+            <Font size="44.0" />
+         </font>
+      </Label>
+      <Label layoutX="534.0" layoutY="167.0" text="Nazwa:" />
+      <Label layoutX="534.0" layoutY="200.0" text="Klasa:" />
+      <Label layoutX="536.0" layoutY="238.0" text="Typ zwracany:" />
+      <Label layoutX="536.0" layoutY="271.0" text="Argumenty:" />
+      <Label fx:id="nameLabel" layoutX="669.0" layoutY="167.0" prefHeight="21.0" prefWidth="459.0" text="-" />
+      <Label fx:id="classNameLabel" layoutX="669.0" layoutY="200.0" prefHeight="21.0" prefWidth="459.0" text="-" />
+      <Label fx:id="returnTypeLabel" layoutX="669.0" layoutY="238.0" prefHeight="21.0" prefWidth="459.0" text="-" />
+      <Label fx:id="argumentsLabel" layoutX="669.0" layoutY="271.0" prefHeight="21.0" prefWidth="459.0" text="-" />
+      <Label layoutX="536.0" layoutY="313.0" text="Sygnatura:" />
+      <Label fx:id="signatureLabel" layoutX="669.0" layoutY="313.0" prefHeight="21.0" prefWidth="517.0" text="-" />
+      <Label layoutX="80.0" layoutY="413.0" prefHeight="34.0" prefWidth="333.0" text="Podaj wartości argumentów:">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <TextField fx:id="firstArgumentTextField" alignment="CENTER" layoutX="388.0" layoutY="415.0" prefHeight="31.0" prefWidth="228.0" />
+      <Label layoutX="80.0" layoutY="502.0" text="Wynik:">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <TextField fx:id="secondArgumentTextField" alignment="CENTER" layoutX="650.0" layoutY="415.0" prefHeight="31.0" prefWidth="228.0" />
+      <Label fx:id="resultLabel" layoutX="193.0" layoutY="502.0" prefHeight="34.0" prefWidth="320.0" text="-">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+      <Button fx:id="executeButton" layoutX="943.0" layoutY="415.0" mnemonicParsing="false" onAction="#executeButtonClicked" prefHeight="31.0" prefWidth="169.0" text="WYWOŁAJ" />
+      <MediaView fitHeight="200.0" fitWidth="200.0" layoutX="14.0" layoutY="536.0" />
+      <Label fx:id="errorLabel" layoutX="502.0" layoutY="502.0" prefHeight="50.0" prefWidth="655.0" style="-fx-font-weight: bold;" text="Sprawdź poprawność argumentów!!!" textFill="RED">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
