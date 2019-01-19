@@ -2,10 +2,7 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -69,6 +66,9 @@ public class Controller {
     private TextField secondArgumentTextField;
 
     @FXML
+    private TextArea textArea;
+
+    @FXML
     void initialize() {
         fileLoader = new FileLoader();
         directoryChosen = new File(".");
@@ -94,12 +94,13 @@ public class Controller {
 
     @FXML
     void loadMenuItemClicked() throws Exception {
+        textArea.setText("");
         if(directoryChosen == null) {
             return;
         }
         clearComboBox(methodComboBox);
         System.out.println(directoryChosen);
-        fileLoader.addFilesFromDirectory(directoryChosen);
+        fileLoader.addFilesFromDirectory(directoryChosen, textArea);
         fillComboBox(methodComboBox, fileLoader.getMethodNames());
 
     }
@@ -235,6 +236,7 @@ public class Controller {
         executeButton.setDisable(true);
         firstArgumentTextField.setDisable(true);
         secondArgumentTextField.setDisable(true);
+        textArea.setEditable(false);
     }
 
     private String typesName(Type[] types) {

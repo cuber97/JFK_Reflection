@@ -1,6 +1,7 @@
 package sample;
 
 import com.sun.org.apache.bcel.internal.util.ClassPath;
+import javafx.scene.control.TextArea;
 import javafx.stage.DirectoryChooser;
 import sample.interfaces.BooleanOperable;
 import sample.interfaces.ByteOperable;
@@ -27,7 +28,7 @@ public class FileLoader {
 
         for (Class<?> c : classes) {
             Method[] methods = c.getDeclaredMethods();
-            for(Method m: methods) {
+            for (Method m : methods) {
                 list.add(m);
             }
         }
@@ -35,24 +36,26 @@ public class FileLoader {
         return list;
     }
 
-    public void addFilesFromDirectory(File directory) throws IOException {
+    public void addFilesFromDirectory(File directory, TextArea textArea) throws IOException {
         classes.clear();
 
-        for(File fileEntry: directory.listFiles()) {
+        for (File fileEntry : directory.listFiles()) {
             if (fileEntry.isFile()) {
-                if(fileEntry.getName().endsWith(".jar")) {
-                    System.out.println("Added " + fileEntry.getName());
-                    addJarFile(fileEntry);
+                if (fileEntry.getName().endsWith(".jar")) {
+                    System.out.println("Exploring " + fileEntry.getName());
+                    addFileInfo(fileEntry, textArea);
+                    addJarFile(fileEntry, textArea);
                 }
-                if(fileEntry.getName().endsWith(".class")) {
-                    System.out.println("Added " + fileEntry.getName());
-                    addClassFile(fileEntry);
+                if (fileEntry.getName().endsWith(".class")) {
+                    System.out.println("Exploring " + fileEntry.getName());
+                    addFileInfo(fileEntry, textArea);
+                    addClassFile(fileEntry, textArea);
                 }
             }
         }
     }
 
-    public void addJarFile(File directory) throws IOException {
+    public void addJarFile(File directory, TextArea textArea) throws IOException {
         JarFile jarFile = null;
         try {
             jarFile = new JarFile(directory);
@@ -71,8 +74,10 @@ public class FileLoader {
                 className = className.replace('/', '.');
                 try {
                     Class<?> c = cl.loadClass(className);
-                    if (isAssignable(c)) {
+                    if (isAssignable(c, textArea)) {
                         classes.add(c);
+                    } else {
+                        negativeInfo(c, textArea);
                     }
 
                 } catch (ClassNotFoundException exp) {
@@ -87,10 +92,10 @@ public class FileLoader {
         }
     }
 
-    public void addClassFile(File file) throws IOException{
+    public void addClassFile(File file, TextArea textArea) throws IOException {
         String path = file.getParent();
         String className = file.getName();
-        className = className.substring(0,className.indexOf("."));
+        className = className.substring(0, className.indexOf("."));
 
         File classFile = new File(path);
 
@@ -105,25 +110,57 @@ public class FileLoader {
             e.printStackTrace();
         }
 
-        if (isAssignable(c)) {
+        if (isAssignable(c, textArea)) {
             classes.add(c);
+        } else {
+            negativeInfo(c, textArea);
         }
     }
 
-    public boolean isAssignable(Class<?> c) {
+    public boolean isAssignable(Class<?> c, TextArea textArea) {
         if (BooleanOperable.class.isAssignableFrom(c)) {
+            addClassInfo(c, BooleanOperable.class.getName(), textArea);
             return true;
         }
         if (ByteOperable.class.isAssignableFrom(c)) {
+            addClassInfo(c, ByteOperable.class.getName(), textArea);
             return true;
         }
         if (IntegerOperable.class.isAssignableFrom(c)) {
+            addClassInfo(c, IntegerOperable.class.getName(), textArea);
             return true;
         }
         if (StringOperable.class.isAssignableFrom(c)) {
+            addClassInfo(c, StringOperable.class.getName(), textArea);
             return true;
         }
-
         return false;
+    }
+
+    private void addClassInfo(Class<?> c, String s, TextArea textArea) {
+        StringBuilder stringBuilder = new StringBuilder(textArea.getText());
+        stringBuilder.append("Class ");
+        stringBuilder.append(c.getName());
+        stringBuilder.append(" implements interface ");
+        stringBuilder.append(s);
+        stringBuilder.append("\n");
+        textArea.setText(stringBuilder.toString());
+    }
+
+    private void addFileInfo(File fileEntry, TextArea textArea) {
+        StringBuilder stringBuilder = new StringBuilder(textArea.getText());
+        stringBuilder.append("Exploring ");
+        stringBuilder.append(fileEntry.getName());
+        stringBuilder.append("\n");
+        textArea.setText(stringBuilder.toString());
+    }
+
+    private void negativeInfo(Class<?> c, TextArea textArea) {
+        StringBuilder stringBuilder = new StringBuilder(textArea.getText());
+
+        stringBuilder.append("Class ");
+        stringBuilder.append(c.getName());
+        stringBuilder.append(" doesn't meet the contract.");
+        stringBuilder.append("\n");
     }
 }
