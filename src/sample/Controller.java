@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -12,7 +11,6 @@ import sample.interfaces.IntegerOperable;
 import sample.interfaces.StringOperable;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -57,6 +55,9 @@ public class Controller {
     private Label signatureLabel;
 
     @FXML
+    private Label interfaceLabel;
+
+    @FXML
     private Label resultLabel;
 
     @FXML
@@ -66,11 +67,11 @@ public class Controller {
     private TextField secondArgumentTextField;
 
     @FXML
-    private TextArea textArea;
+    private TextArea textArea = new TextArea();
 
     @FXML
     void initialize() {
-        fileLoader = new FileLoader();
+        fileLoader = new FileLoader(this);
         directoryChosen = new File(".");
         pathLabel.setText(directoryChosen.getAbsolutePath());
         resetLabels();
@@ -100,7 +101,7 @@ public class Controller {
         }
         clearComboBox(methodComboBox);
         System.out.println(directoryChosen);
-        fileLoader.addFilesFromDirectory(directoryChosen, textArea);
+        fileLoader.addFilesFromDirectory(directoryChosen);
         fillComboBox(methodComboBox, fileLoader.getMethodNames());
 
     }
@@ -118,6 +119,7 @@ public class Controller {
         classNameLabel.setText(method.getDeclaringClass().toString());
         returnTypeLabel.setText(method.getGenericReturnType().toString());
         argumentsLabel.setText(typesName(method.getGenericParameterTypes()));
+        interfaceLabel.setText(interfacesName(method.getDeclaringClass().getGenericInterfaces()));
         signatureLabel.setText(method.toString());
 
         switch (method.getParameterCount()) {
@@ -141,16 +143,11 @@ public class Controller {
         List<Object> args = fillArguments(method);
             Object result = method.invoke(method.getDeclaringClass().newInstance(), args.toArray());
             resultLabel.setText(result.toString());
-        } catch (InstantiationException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             errorLabel.setVisible(true);
 
-        } catch (InvocationTargetException e) {
-
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
     }
 
@@ -223,12 +220,17 @@ public class Controller {
         return args;
     }
 
+    void appendTextArea(String s) {
+        textArea.appendText(s);
+    }
+
     private void resetLabels() {
         errorLabel.setVisible(false);
         nameLabel.setText("-");
         classNameLabel.setText("-");
         returnTypeLabel.setText("-");
         argumentsLabel.setText("-");
+        interfaceLabel.setText("-");
         signatureLabel.setText("-");
         resultLabel.setText("-");
         firstArgumentTextField.setText("");
@@ -240,6 +242,15 @@ public class Controller {
     }
 
     private String typesName(Type[] types) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Type type : types) {
+            stringBuilder.append(type);
+            stringBuilder.append(" ");
+        }
+        return stringBuilder.toString();
+    }
+
+    private String interfacesName(Type[] types) {
         StringBuilder stringBuilder = new StringBuilder();
         for (Type type : types) {
             stringBuilder.append(type);
