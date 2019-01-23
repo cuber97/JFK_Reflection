@@ -1,4 +1,4 @@
-import sample.interfaces.IntegerOperable;
+import mypackage.interfaces.IntegerOperable;
 
 public class IntegerOperator implements IntegerOperable {
     public int add(int a, int b) {

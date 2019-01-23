@@ -1,4 +1,4 @@
-import sample.interfaces.BooleanOperable;
+import mypackage.interfaces.BooleanOperable;
 
 public class BooleanOperator implements BooleanOperable{
     public boolean and(boolean x, boolean y) {

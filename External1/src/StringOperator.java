@@ -1,4 +1,4 @@
-import sample.interfaces.StringOperable;
+import mypackage.interfaces.StringOperable;
 
 public class StringOperator implements StringOperable {
     public String concat(String s1, String s2) {

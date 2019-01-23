@@ -1,9 +1,9 @@
-package sample;
+package mypackage;
 
-import sample.interfaces.BooleanOperable;
-import sample.interfaces.ByteOperable;
-import sample.interfaces.IntegerOperable;
-import sample.interfaces.StringOperable;
+import mypackage.interfaces.BooleanOperable;
+import mypackage.interfaces.ByteOperable;
+import mypackage.interfaces.IntegerOperable;
+import mypackage.interfaces.StringOperable;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,12 +47,10 @@ class FileLoader {
 
             if (fileEntry.isFile()) {
                 if (fileEntry.getName().endsWith(".jar")) {
-                    System.out.println("Exploring " + fileEntry.getName());
                     addFileInfo(fileEntry);
                     addJarFile(fileEntry);
                 }
                 if (fileEntry.getName().endsWith(".class")) {
-                    System.out.println("Exploring " + fileEntry.getName());
                     addFileInfo(fileEntry);
                     addClassFile(fileEntry);
                 }

@@ -1,4 +1,4 @@
-import sample.interfaces.ByteOperable;
+import mypackage.interfaces.ByteOperable;
 
 public class ByteOperator implements ByteOperable {
     public Integer and(Byte byte1, Byte byte2) {

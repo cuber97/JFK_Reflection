@@ -1,4 +1,4 @@
-package sample.interfaces;
+package mypackage.interfaces;
 
 public interface IntegerOperable {
     int add(int a, int b);

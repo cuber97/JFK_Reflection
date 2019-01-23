@@ -1,4 +1,4 @@
-package sample.interfaces;
+package mypackage.interfaces;
 
 public interface BooleanOperable {
     boolean and(boolean x, boolean y);

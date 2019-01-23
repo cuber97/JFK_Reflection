@@ -1,14 +1,14 @@
-package sample;
+package mypackage;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import sample.interfaces.BooleanOperable;
-import sample.interfaces.ByteOperable;
-import sample.interfaces.IntegerOperable;
-import sample.interfaces.StringOperable;
+import mypackage.interfaces.BooleanOperable;
+import mypackage.interfaces.ByteOperable;
+import mypackage.interfaces.IntegerOperable;
+import mypackage.interfaces.StringOperable;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -72,7 +72,7 @@ public class Controller {
     @FXML
     void initialize() {
         fileLoader = new FileLoader(this);
-        directoryChosen = new File(".");
+        directoryChosen = new File("compiled");
         pathLabel.setText(directoryChosen.getAbsolutePath());
         resetLabels();
     }
@@ -81,7 +81,7 @@ public class Controller {
     void openMenuItemClicked() {
         Stage stage = (Stage) anchorPane.getScene().getWindow();
 
-        File currentDirFile = new File(".");
+        File currentDirFile = new File("compiled");
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select directory with jars and/or .class files.");
         directoryChooser.setInitialDirectory(currentDirFile);
@@ -100,7 +100,6 @@ public class Controller {
             return;
         }
         clearComboBox(methodComboBox);
-        System.out.println(directoryChosen);
         fileLoader.addFilesFromDirectory(directoryChosen);
         fillComboBox(methodComboBox, fileLoader.getMethodNames());
 

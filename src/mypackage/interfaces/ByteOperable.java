@@ -1,4 +1,4 @@
-package sample.interfaces;
+package mypackage.interfaces;
 
 public interface ByteOperable {
     Integer and(Byte byte1, Byte byte2);
