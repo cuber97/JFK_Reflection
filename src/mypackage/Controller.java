@@ -87,7 +87,7 @@ public class Controller {
         directoryChooser.setInitialDirectory(currentDirFile);
         directoryChosen = directoryChooser.showDialog(stage);
         if (directoryChosen == null) {
-            pathLabel.setText("Wybierz katalog");
+            pathLabel.setText("Choose directory");
         } else {
             pathLabel.setText(directoryChosen.getAbsolutePath());
         }
