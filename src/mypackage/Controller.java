@@ -163,10 +163,8 @@ public class Controller {
     private List<Object> fillArguments(Method method) throws IllegalArgumentException {
         List<Object> args = new ArrayList<>();
         Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
-        System.out.println("Interfaces: " + method.getDeclaringClass());
 
         for (Class<?> i : interfaces) {
-            System.out.println(i.getName());
             if (i.getName().equals(BooleanOperable.class.getName())) {
                 if (!(firstArgumentTextField.getText().equals("true") || firstArgumentTextField.getText().equals("false"))
                         || !(secondArgumentTextField.getText().equals("true") || secondArgumentTextField.getText().equals("false"))) {
