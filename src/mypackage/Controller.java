@@ -5,10 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import mypackage.interfaces.BooleanOperable;
-import mypackage.interfaces.ByteOperable;
-import mypackage.interfaces.IntegerOperable;
-import mypackage.interfaces.StringOperable;
+import mypackage.interfaces.*;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -61,6 +58,9 @@ public class Controller {
     private Label resultLabel;
 
     @FXML
+    private Label descriptionLabel;
+
+    @FXML
     private TextField firstArgumentTextField;
 
     @FXML
@@ -96,13 +96,12 @@ public class Controller {
     @FXML
     void loadMenuItemClicked() throws Exception {
         textArea.setText("");
-        if(directoryChosen == null) {
+        if (directoryChosen == null) {
             return;
         }
         clearComboBox(methodComboBox);
         fileLoader.addFilesFromDirectory(directoryChosen);
         fillComboBox(methodComboBox, fileLoader.getMethodNames());
-
     }
 
     @FXML
@@ -120,6 +119,11 @@ public class Controller {
         argumentsLabel.setText(typesName(method.getGenericParameterTypes()));
         interfaceLabel.setText(interfacesName(method.getDeclaringClass().getGenericInterfaces()));
         signatureLabel.setText(method.toString());
+
+        MetaData description = method.getAnnotation(MetaData.class);
+        if (description != null) {
+            descriptionLabel.setText(description.metadata());
+        }
 
         switch (method.getParameterCount()) {
             case 1:
@@ -139,7 +143,7 @@ public class Controller {
         errorLabel.setVisible(false);
         Method method = methodComboBox.getSelectionModel().getSelectedItem();
         try {
-        List<Object> args = fillArguments(method);
+            List<Object> args = fillArguments(method);
             Object result = method.invoke(method.getDeclaringClass().newInstance(), args.toArray());
             resultLabel.setText(result.toString());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -230,6 +234,7 @@ public class Controller {
         interfaceLabel.setText("-");
         signatureLabel.setText("-");
         resultLabel.setText("-");
+        descriptionLabel.setText("-");
         firstArgumentTextField.setText("");
         secondArgumentTextField.setText("");
         executeButton.setDisable(true);

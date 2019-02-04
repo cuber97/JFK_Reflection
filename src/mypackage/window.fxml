@@ -75,6 +75,8 @@
    <TextArea fx:id="textArea" layoutX="86.0" layoutY="78.0" prefHeight="200.0" prefWidth="409.0" />
    <Label layoutX="586.0" layoutY="251.0" prefHeight="21.0" prefWidth="99.0" text="Interface:" />
    <Label fx:id="interfaceLabel" layoutX="716.0" layoutY="251.0" prefHeight="21.0" prefWidth="459.0" text="-" />
+   <Label layoutX="585.0" layoutY="316.0" text="Description:" />
+   <Label fx:id="descriptionLabel" layoutX="716.0" layoutY="316.0" prefHeight="21.0" prefWidth="519.0" text="-" />
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
