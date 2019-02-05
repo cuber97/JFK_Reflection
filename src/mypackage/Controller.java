@@ -11,7 +11,6 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
@@ -143,10 +142,137 @@ public class Controller {
         errorLabel.setVisible(false);
         Method method = methodComboBox.getSelectionModel().getSelectedItem();
         try {
-            List<Object> args = fillArguments(method);
-            Object result = method.invoke(method.getDeclaringClass().newInstance(), args.toArray());
-            resultLabel.setText(result.toString());
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            Object object = method.getDeclaringClass().getConstructor().newInstance();
+
+            Type type = method.getDeclaringClass().getGenericInterfaces()[0];
+            String interfaceName = type.getTypeName();
+            String methodName = method.getName();
+            switch (interfaceName) {
+                case "mypackage.interfaces.IntegerOperable":
+                    IntegerOperable integerOperable = (IntegerOperable) object;
+                    Integer int1, int2, int3;
+                    switch (methodName) {
+                        case "max":
+                            int1 = Integer.parseInt(firstArgumentTextField.getText());
+                            int2 = Integer.parseInt(secondArgumentTextField.getText());
+                            int3 = integerOperable.max(int1, int2);
+                            resultLabel.setText(int3.toString());
+                            break;
+                        case "min":
+                            int1 = Integer.parseInt(firstArgumentTextField.getText());
+                            int2 = Integer.parseInt(secondArgumentTextField.getText());
+                            int3 = integerOperable.min(int1, int2);
+                            resultLabel.setText(int3.toString());
+                            break;
+                        case "add":
+                            int1 = Integer.parseInt(firstArgumentTextField.getText());
+                            int2 = Integer.parseInt(secondArgumentTextField.getText());
+                            int3 = integerOperable.add(int1, int2);
+                            resultLabel.setText(int3.toString());
+                            break;
+                        case "subtract":
+                            int1 = Integer.parseInt(firstArgumentTextField.getText());
+                            int2 = Integer.parseInt(secondArgumentTextField.getText());
+                            int3 = integerOperable.subtract(int1, int2);
+                            resultLabel.setText(int3.toString());
+                            break;
+                        case "multiply":
+                            int1 = Integer.parseInt(firstArgumentTextField.getText());
+                            int2 = Integer.parseInt(secondArgumentTextField.getText());
+                            int3 = integerOperable.multiply(int1, int2);
+                            resultLabel.setText(int3.toString());
+                            break;
+                    }
+                    break;
+                case "mypackage.interfaces.BooleanOperable":
+                    BooleanOperable booleanOperable = (BooleanOperable) object;
+                    Boolean boolean1, boolean2, boolean3;
+                    if((!(firstArgumentTextField.getText().equals("true") || firstArgumentTextField.getText().equals("false"))) ||
+                            (!(secondArgumentTextField.getText().equals("true") || secondArgumentTextField.getText().equals("false")))) {
+                        throw new IllegalArgumentException();
+                    }
+                    switch (methodName) {
+                        case "and":
+                            boolean1 = Boolean.parseBoolean(firstArgumentTextField.getText());
+                            boolean2 = Boolean.parseBoolean(secondArgumentTextField.getText());
+                            boolean3 = booleanOperable.and(boolean1, boolean2);
+                            resultLabel.setText(boolean3.toString());
+                            break;
+                        case "or":
+                            boolean1 = Boolean.parseBoolean(firstArgumentTextField.getText());
+                            boolean2 = Boolean.parseBoolean(secondArgumentTextField.getText());
+                            boolean3 = booleanOperable.or(boolean1, boolean2);
+                            resultLabel.setText(boolean3.toString());
+                            break;
+                        case "xor":
+                            boolean1 = Boolean.parseBoolean(firstArgumentTextField.getText());
+                            boolean2 = Boolean.parseBoolean(secondArgumentTextField.getText());
+                            boolean3 = booleanOperable.xor(boolean1, boolean2);
+                            resultLabel.setText(boolean3.toString());
+                            break;
+                    }
+                    break;
+                case "mypackage.interfaces.ByteOperable":
+                    ByteOperable byteOperable = (ByteOperable) object;
+                    Byte byte1, byte2;
+                    Integer integer3;
+                    switch (methodName) {
+                        case "and":
+                            byte1 = Byte.parseByte(firstArgumentTextField.getText());
+                            byte2 = Byte.parseByte(secondArgumentTextField.getText());
+                            integer3 = byteOperable.and(byte1, byte2);
+                            resultLabel.setText(integer3.toString());
+                            break;
+                        case "or":
+                            byte1 = Byte.parseByte(firstArgumentTextField.getText());
+                            byte2 = Byte.parseByte(secondArgumentTextField.getText());
+                            integer3 = byteOperable.or(byte1, byte2);
+                            resultLabel.setText(integer3.toString());
+                            break;
+                        case "xor":
+                            byte1 = Byte.parseByte(firstArgumentTextField.getText());
+                            byte2 = Byte.parseByte(secondArgumentTextField.getText());
+                            integer3 = byteOperable.xor(byte1, byte2);
+                            resultLabel.setText(integer3.toString());
+                            break;
+                        case "negate":
+                            byte1 = Byte.parseByte(firstArgumentTextField.getText());
+                            integer3 = byteOperable.negate(byte1);
+                            resultLabel.setText(integer3.toString());
+                            break;
+                    }
+                    break;
+                case "mypackage.interfaces.StringOperable":
+                    StringOperable stringOperable = (StringOperable) object;
+                    String string1, string2;
+                    String string3;
+                    Integer s1;
+                    switch (methodName) {
+                        case "concat":
+                            string1 = firstArgumentTextField.getText();
+                            string2 = secondArgumentTextField.getText();
+                            string3 = stringOperable.concat(string1, string2);
+                            resultLabel.setText(string3);
+                            break;
+                        case "toLowerCase":
+                            string1 = firstArgumentTextField.getText();
+                            string3 = stringOperable.toLowerCase(string1);
+                            resultLabel.setText(string3);
+                            break;
+                        case "toUpperCase":
+                            string1 = firstArgumentTextField.getText();
+                            string3 = stringOperable.toUpperCase(string1);
+                            resultLabel.setText(string3);
+                            break;
+                        case "length":
+                            string1 = firstArgumentTextField.getText();
+                            s1 = stringOperable.length(string1);
+                            resultLabel.setText(s1.toString());
+                            break;
+                    }
+                break;
+            }
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {
             errorLabel.setVisible(true);
@@ -164,62 +290,6 @@ public class Controller {
         comboBox.getItems().clear();
     }
 
-    private List<Object> fillArguments(Method method) throws IllegalArgumentException {
-        List<Object> args = new ArrayList<>();
-        Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
-
-        for (Class<?> i : interfaces) {
-            if (i.getName().equals(BooleanOperable.class.getName())) {
-                if (!(firstArgumentTextField.getText().equals("true") || firstArgumentTextField.getText().equals("false"))
-                        || !(secondArgumentTextField.getText().equals("true") || secondArgumentTextField.getText().equals("false"))) {
-                    throw new IllegalArgumentException();
-                }
-                switch (method.getParameterCount()) {
-                    case 1:
-                        args.add(Boolean.parseBoolean(firstArgumentTextField.getText()));
-                        break;
-                    case 2:
-                        args.add(Boolean.parseBoolean(firstArgumentTextField.getText()));
-                        args.add(Boolean.parseBoolean(secondArgumentTextField.getText()));
-                        break;
-                }
-            }
-            if (i.getName().equals(StringOperable.class.getName())) {
-                switch (method.getParameterCount()) {
-                    case 1:
-                        args.add(firstArgumentTextField.getText());
-                        break;
-                    case 2:
-                        args.add(firstArgumentTextField.getText());
-                        args.add(secondArgumentTextField.getText());
-                        break;
-                }
-            }
-            if (i.getName().equals(ByteOperable.class.getName())) {
-                switch (method.getParameterCount()) {
-                    case 1:
-                        args.add(Byte.parseByte(firstArgumentTextField.getText()));
-                        break;
-                    case 2:
-                        args.add(Byte.parseByte(firstArgumentTextField.getText()));
-                        args.add(Byte.parseByte(secondArgumentTextField.getText()));
-                        break;
-                }
-            }
-            if (i.getName().equals(IntegerOperable.class.getName())) {
-                switch (method.getParameterCount()) {
-                    case 1:
-                        args.add(Integer.parseInt(firstArgumentTextField.getText()));
-                        break;
-                    case 2:
-                        args.add(Integer.parseInt(firstArgumentTextField.getText()));
-                        args.add(Integer.parseInt(secondArgumentTextField.getText()));
-                        break;
-                }
-            }
-        }
-        return args;
-    }
 
     void appendTextArea(String s) {
         textArea.appendText(s);
